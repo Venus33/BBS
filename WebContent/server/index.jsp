@@ -113,7 +113,7 @@
                 </a>
                 <ul class="sub-menu">
                     <li>
-                        <a _href="server/order-list.jsp">
+                        <a _href="${pageContext.request.contextPath}/Invitation?op=showInvitation">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>帖子列表</cite>
                         </a>
@@ -127,10 +127,11 @@
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>
                 <ul class="sub-menu">
-                    <li>
-                        <a _href="cate.html">
+                    
+                     <li>
+                        <a _href="${pageContext.request.contextPath}/Plant?op=show">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>多级分类</cite>
+                            <cite>模块列表</cite>
                         </a>
                     </li >
                 </ul>

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+        <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%> 
 <!DOCTYPE html>
 <html class="x-admin-sm">
   <head>
@@ -64,7 +65,7 @@
       </div>
       <xblock>
         <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-        <button class="layui-btn" onclick="x_admin_show('添加用户','./order-add.html')"><i class="layui-icon"></i>添加</button>
+        <button class="layui-btn" onclick="x_admin_show('添加用户','${pageContext.request.contextPath}/server/order-add.jsp')"><i class="layui-icon"></i>添加</button>
         <span class="x-right" style="line-height:40px">共有数据：88 条</span>
       </xblock>
       <table class="layui-table">
@@ -73,43 +74,57 @@
             <th>
               <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
             </th>
-            <th>订单编号</th>
-            <th>收货人</th>
-            <th>总金额</th>
-            <th>应付金额</th>
-            <th>订单状态</th>
-            <th>支付状态</th>
-            <th>发货状态</th>
-            <th>支付方式</th>
-            <th>配送方式</th>
-            <th>下单时间</th>
+            <th>用户id</th>
+            <th>帖子信息</th>
+            <th>发帖人id</th>
+            <th>所属模块</th>
+            <th>帖子分类</th>
+            <th>审核状态</th>
+            <th>是否屏蔽</th>
+            <th>是否精华</th>
+            <th>发布时间</th>
+            <th>修改时间</th>
             <th >操作</th>
             </tr>
         </thead>
         <tbody>
+        <c:forEach items="${list }" var="invition">
           <tr>
             <td>
               <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
             </td>
-            <td>2017009171822298053</td>
-            <td>老王:18925139194</td>
-            <td>7829.10</td>
-            <td>7854.10</td>
-            <td>待确认</td>
-            <td>未支付</td>
-            <td>未发货</td>
-            <td>其他方式</td>
-            <td>申通物流</td>
-            <td>2017-08-17 18:22</td>
+            <td>${invition.invitationId}</td>
+            <td>${invition.invitationMessage }</td>
+            <td>${invition.userId }</td>
+            <td><c:forEach items="${plist }" var="ate">
+            	<c:if test="${ate.plateId== invition.plateId}">
+            	${ate.plateTitle }
+            	</c:if>
+            </c:forEach>
+            </td>
+            <td><c:forEach items="${category }" var="cgory">
+            	<c:if test="${cgory.categoryId== invition.categoryId }">
+            	${cgory.category }
+            	</c:if>
+            </c:forEach></td>
+            <td>${invition.isPass }</td>
+            <td>${invition.isEnable}</td>
+            <td>${invition.isCream }</td>
+            <td>${invition.invitationCreate }</td>
+            <td>${invition.invitationModify }</td>
             <td class="td-manage">
-              <a title="查看"  onclick="x_admin_show('编辑','order-view.html')" href="javascript:;">
+             <a title="查看"  onclick="x_admin_show('编辑','${pageContext.request.contextPath}/Invitation?op=findbyid&invitationId=${invition.invitationId}')" href="javascript:;">
                 <i class="layui-icon">&#xe63c;</i>
               </a>
-              <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
+              <a title="编辑"  onclick="x_admin_show('编辑','${pageContext.request.contextPath}/Invitation?op=findid&invitationId=${invition.invitationId}')" href="javascript:;">
+                <i class="layui-icon">&#xe642;</i>
+              </a>
+              <a title="删除" onclick="member_del(this,'${invition.invitationId}')" href="javascript:;">
                 <i class="layui-icon">&#xe640;</i>
               </a>
             </td>
           </tr>
+          </c:forEach>
         </tbody>
       </table>
       <div class="page">
@@ -165,10 +180,15 @@
 
       /*用户-删除*/
       function member_del(obj,id){
-          layer.confirm('确认要删除吗？',function(index){
-              //发异步删除数据
-              $(obj).parents("tr").remove();
-              layer.msg('已删除!',{icon:1,time:1000});
+          layer.confirm('确认要删除吗？',function(index){$.post("${pageContext.request.contextPath }/Invitation?op=deletebyid",{invitationId:id},function(data){
+     		 if(data.result=="true"){
+     			//发异步删除数据
+                  $(obj).parents("tr").remove();
+                  layer.msg('已删除!',{icon:1,time:1000});
+     		 }else{
+     			 layer.msg('删除失败!',{icon:2,time:1000});
+     		 }
+     	 });
           });
       }
 

@@ -5,21 +5,23 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
- * Êı¾İ¿â¹¤¾ßÀà
+ * ï¿½ï¿½ï¿½İ¿â¹¤ï¿½ï¿½ï¿½ï¿½
  * @author lindy
  *
  */
 public class DataUtils {
-	// 1.´´½¨ĞèÒªÓÃµ½µÄ×Ö·û´®±äÁ¿£¬²¢¸³Öµ
+	// 1.ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Ãµï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
 	private static final String DRIVER = "com.mysql.jdbc.Driver";
 	private static final String URL = "jdbc:mysql://localhost:3306/bbs?"
 			+ "characterEncoding=UTF-8&useUnicode=true";
 	private static final String USERNAME = "root";
-	private static final String PASSWORD = "root";
+	private static final String PASSWORD = "9999";
 	
-	// 2.´´½¨Ò»¸ö»ñµÃÊı¾İ¿âÁ¬½ÓµÄ·½·¨
+	// 2.ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ¿ï¿½ï¿½ï¿½ï¿½ÓµÄ·ï¿½ï¿½ï¿½
 	public static Connection createConnection() {
 		Connection conn = null;
 		try {
@@ -33,7 +35,7 @@ public class DataUtils {
 		return conn;
 	}
 	
-	// 3.´´½¨Ò»¸öÊÍ·Å×ÊÔ´µÄ·½·¨
+	// 3.ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½Ô´ï¿½Ä·ï¿½ï¿½ï¿½
 	public static void closeAll(Connection conn,PreparedStatement pst
 			,ResultSet rs) {
 		try {
@@ -48,20 +50,20 @@ public class DataUtils {
 		}
 	}
 	
-	// 4.´´½¨Í¨ÓÃµÄÔö¡¢É¾¡¢¸Ä·½·¨
+	// 4.ï¿½ï¿½ï¿½ï¿½Í¨ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½
 	public static int executeUpdate(String sql,Object ... parms) {
 		Connection conn = createConnection();
 		PreparedStatement pst = null;
 		try {
 			pst = conn.prepareStatement(sql);
-			// Èç¹û²ÎÊıÊı¾İ²»Îª¿Õ
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ²ï¿½Îªï¿½ï¿½
 			if (parms != null) {
-				// ÎªÕ¼Î»·û¸³Öµ
+				// ÎªÕ¼Î»ï¿½ï¿½ï¿½ï¿½Öµ
 				for (int i = 0; i < parms.length; i++) {
 					pst.setObject((i+1), parms[i]);
 				}
 			}
-			// µ÷ÓÃ·½·¨²¢·µ»Ø½á¹û
+			// ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø½ï¿½ï¿½
 			return pst.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -72,18 +74,18 @@ public class DataUtils {
 		return 0;
 	}
 	
-	// 5.´´½¨Í¨ÓÃµÄ²éÑ¯·½·¨
-	public static ResultSet queryAll(String sql,Object ... params) {
+	// 5.ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ÃµÄ²ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½
+	public static ResultSet queryAll(String sql,Object ... parms) {
 		ResultSet rs = null;
 		Connection conn = createConnection();
 		PreparedStatement pst = null;
 		try {
 			pst = conn.prepareStatement(sql);
-			// Èç¹û²ÎÊıÊı¾İ²»Îª¿Õ
-			if (params != null) {
-				// ÎªÕ¼Î»·û¸³Öµ
-				for (int i = 0; i < params.length; i++) {
-					pst.setObject((i+1), params[i]);
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ²ï¿½Îªï¿½ï¿½
+			if (parms != null) {
+				// ÎªÕ¼Î»ï¿½ï¿½ï¿½ï¿½Öµ
+				for (int i = 0; i < parms.length; i++) {
+					pst.setObject((i+1), parms[i]);
 				}
 			}
 			rs = pst.executeQuery();
@@ -92,4 +94,21 @@ public class DataUtils {
 		}
 		return rs;
 	}
+
+	//åˆ›å»ºä¸€ä¸ªè·å–ç³»ç»Ÿå½“å‰æ—¶é—´çš„æ–¹æ³•
+    // å®šä¹‰ä¸€ä¸ªä¸“é—¨è´Ÿè´£æ—¥æœŸæ ¼å¼è½¬æ¢çš„å¯¹è±¡
+	static Date  date = new Date();
+	static String invitationid="";
+	static SimpleDateFormat format=new SimpleDateFormat("YYYY-MM-dd-HH-mm-ss");
+    public static String GetId() {	
+    	String id[]=format.format(date).split("-");
+		for (int i = id.length-1; i>=0; i--) {
+			invitationid=id[i]+invitationid;
+		}   
+		return invitationid;
+	}
+    //è·å¾—ç³»ç»Ÿå½“å‰æ—¶é—´çš„æ–¹æ³•
+    public static Date getDate() {   
+		return date;   	
+    }
 }

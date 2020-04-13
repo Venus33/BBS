@@ -168,15 +168,20 @@
   	  			    	$.ajax({
   			            	url: '${pageContext.request.contextPath }/UserServlet?op=add',
   			            	type:"post",
+  			            	
   			            	dataType:"text",
   			            	success:function(text){
   			            		if(text.trim()=="true"){
+  			            			
   			            		//发异步，把数据提交给php
   			  			            layer.alert("增加成功", {icon: 6},function () {
-  			  			                //关闭当前frame
+  			  			          
+  			  			            	//关闭当前frame
   			  			                x_admin_close();
   			  			                // 可以对父窗口进行刷新 
   			  			                x_admin_father_reload();
+  			  			        	window.parent.opener.location.reload();
+
   			  			            });
   			            		}else{
   			            			layer.alert("增加失败", {icon: 3},function () {
